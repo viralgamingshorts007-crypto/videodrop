@@ -4,161 +4,270 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#090d18">
-<title>VideoDrop — Online Video Tools</title>
+<meta name="theme-color" content="#0b1020">
+<title>VideoDrop - Video Downloader</title>
+
 <style>
 *{box-sizing:border-box}
 body{
-  margin:0;background:#090d18;color:#f5f7ff;
-  font-family:Arial,sans-serif;min-height:100vh;
+  margin:0;background:#0b1020;color:#f5f7ff;
+  font-family:Arial,Helvetica,sans-serif;min-height:100vh
 }
 header{
-  padding:20px 7%;border-bottom:1px solid #26314a;
-  display:flex;justify-content:space-between;align-items:center;
+  padding:20px 6%;display:flex;justify-content:space-between;
+  align-items:center;border-bottom:1px solid #293550;gap:10px
 }
-.logo{font-size:23px;font-weight:800}
+.logo{font-size:24px;font-weight:800}
 .logo span{color:#ff405b}
-header small{color:#a8b2c8}
-main{max-width:780px;margin:65px auto;padding:20px}
+header small{color:#aab5cc}
+main{max-width:760px;margin:45px auto;padding:0 16px}
 .hero{text-align:center}
-h1{font-size:clamp(30px,6vw,48px);margin:10px 0}
-p{color:#a8b2c8;line-height:1.6}
+h1{font-size:clamp(30px,7vw,46px);margin:12px 0}
+h1 span{color:#ff405b}
+p{color:#aab5cc;line-height:1.6}
 .panel{
-  background:#111a2c;border:1px solid #293753;
-  border-radius:18px;padding:24px;margin-top:28px;
+  background:#121a2d;border:1px solid #293550;
+  border-radius:17px;padding:24px;margin:22px 0
 }
-label{display:block;margin:18px 0 8px;font-weight:bold}
-input,select{
+label{display:block;font-weight:bold;margin:18px 0 8px}
+input{
   width:100%;padding:14px;border-radius:10px;
-  border:1px solid #35435f;background:#0b1221;
-  color:white;font-size:16px;
+  border:1px solid #3a4969;background:#080e1b;
+  color:white;font-size:16px
 }
-button,.button{
-  display:block;width:100%;padding:14px;margin-top:12px;
-  background:#ff405b;color:white;border:0;border-radius:10px;
-  font-size:16px;font-weight:bold;cursor:pointer;text-align:center;
+button{
+  width:100%;padding:14px;margin-top:12px;
+  border:0;border-radius:10px;background:#ff405b;
+  color:white;font-size:16px;font-weight:bold;cursor:pointer
 }
-button.secondary{background:#202d46}
+button.secondary{background:#263552}
+button:disabled{opacity:.6}
 .note{font-size:13px}
-#status{overflow-wrap:anywhere;margin-top:16px}
-footer{text-align:center;color:#8c98b1;padding:25px}
-a{color:#91bcff}
+#status{overflow-wrap:anywhere;margin-top:15px}
+.good{color:#65e6b0}
+.bad{color:#ff9cab}
+.features{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:10px;margin:20px 0
+}
+.feature{
+  padding:14px;border:1px solid #293550;
+  border-radius:10px;text-align:center;font-size:13px
+}
+footer{text-align:center;padding:20px;color:#aab5cc;font-size:12px}
+@media(max-width:520px){
+  header{padding:16px}
+  header small{font-size:11px}
+  main{margin:28px auto}
+  .panel{padding:18px}
+  .features{grid-template-columns:1fr}
+}
 </style>
 </head>
+
 <body>
 <header>
   <div class="logo">▶ Video<span>Drop</span></div>
-  <small>Free · Online · No app</small>
+  <small>Free · Online · No App</small>
 </header>
 
 <main>
   <section class="hero">
-    <h1>Video tools, <span style="color:#ff405b">made simple.</span></h1>
-    <p>Open video links or download video files you own
-       or have permission to save. Works on mobile and PC.</p>
+    <h1>Download your <span>videos.</span></h1>
+    <p>
+      Download direct video files on mobile and PC.
+      No app installation required.
+    </p>
   </section>
 
   <section class="panel">
-    <label for="url">YouTube video or livestream link</label>
-    <input id="url" type="url"
-      placeholder="https://www.youtube.com/watch?v=..."
-      autocomplete="url">
-    <button onclick="openYouTube()">Open YouTube video</button>
+    <h2>Direct Video Downloader</h2>
+    <p class="note">
+      Paste a direct MP4, WebM or other supported video-file URL.
+      Only use videos you own or have permission to download.
+    </p>
 
-    <label for="quality">Preferred quality</label>
-    <select id="quality">
-      <option value="1080">1080p — Full HD</option>
-      <option value="720">720p — HD</option>
-      <option value="480">480p</option>
-    </select>
-    <p class="note">Quality depends on the original file.
-       This selector does not convert or extract YouTube streams.</p>
-  </section>
+    <form id="downloadForm">
+      <label for="videoUrl">Video URL</label>
+      <input
+        id="videoUrl"
+        type="url"
+        placeholder="https://example.com/video.mp4"
+        required
+      >
 
-  <section class="panel">
-    <h2>Download an authorized video file</h2>
-    <label for="file">Choose a video from your device</label>
-    <input id="file" type="file"
-      accept="video/mp4,video/webm,video/quicktime">
-    <button onclick="downloadLocal()">Download selected file</button>
+      <label for="fileName">File name (optional)</label>
+      <input
+        id="fileName"
+        type="text"
+        placeholder="my-video.mp4"
+        maxlength="120"
+      >
 
-    <label for="direct">Or enter a direct video file URL</label>
-    <input id="direct" type="url"
-      placeholder="https://example.com/my-video.mp4">
-    <button class="secondary" onclick="openDirect()">
-      Open video file
-    </button>
-    <p class="note">Use files you own or have permission to download.
-       A remote server may block cross-origin downloads.</p>
+      <button id="downloadBtn" type="submit">
+        ⬇ Download Video
+      </button>
+    </form>
+
     <div id="status" role="status" aria-live="polite"></div>
+
+    <p class="note">
+      If the video host blocks browser downloads, the direct link
+      will open instead. Use the host's download option if available.
+    </p>
   </section>
+
+  <section class="panel">
+    <h2>YouTube Videos and Livestreams</h2>
+    <p class="note">
+      This website does not extract video streams from YouTube.
+      You can open YouTube and use its available download features.
+    </p>
+
+    <label for="youtubeUrl">YouTube URL</label>
+    <input
+      id="youtubeUrl"
+      type="url"
+      placeholder="https://www.youtube.com/watch?v=..."
+    >
+
+    <button id="openYoutube" class="secondary" type="button">
+      Open YouTube
+    </button>
+  </section>
+
+  <div class="features">
+    <div class="feature">📱 Mobile Friendly</div>
+    <div class="feature">💻 PC Compatible</div>
+    <div class="feature">🌐 No App Needed</div>
+  </div>
 </main>
 
 <footer>
-  VideoDrop · Browser-based · No account required
+  VideoDrop · Use authorized video files only.
 </footer>
 
 <script>
-function openYouTube(){
-  const value = document.getElementById("url").value.trim();
-  const status = document.getElementById("status");
+const form = document.getElementById("downloadForm");
+const urlInput = document.getElementById("videoUrl");
+const nameInput = document.getElementById("fileName");
+const button = document.getElementById("downloadBtn");
+const statusBox = document.getElementById("status");
 
-  try {
-    const u = new URL(value);
-    const valid =
-      u.hostname === "youtube.com" ||
-      u.hostname.endsWith(".youtube.com") ||
-      u.hostname === "youtu.be" ||
-      u.hostname.endsWith(".youtu.be");
-
-    if (!valid || !["https:", "http:"].includes(u.protocol)) {
-      throw new Error("Invalid YouTube URL");
-    }
-    window.open(u.href, "_blank", "noopener,noreferrer");
-    status.textContent =
-      "YouTube opened. Use its available viewing or download options.";
-  } catch {
-    status.textContent = "Please enter a valid YouTube link.";
-  }
+function showStatus(message, type = "") {
+  statusBox.textContent = message;
+  statusBox.className = type;
 }
 
-function downloadLocal(){
-  const input = document.getElementById("file");
-  const status = document.getElementById("status");
-  const file = input.files[0];
+function cleanFilename(name) {
+  return name
+    .replace(/[\\/:*?"<>|\u0000-\u001F]/g, "_")
+    .trim()
+    .slice(0, 120);
+}
 
-  if (!file) {
-    status.textContent = "Choose a video file first.";
+form.addEventListener("submit", async function(event) {
+  event.preventDefault();
+  showStatus("");
+
+  let url;
+
+  try {
+    url = new URL(urlInput.value.trim());
+
+    if (!["http:", "https:"].includes(url.protocol)) {
+      throw new Error("Invalid URL");
+    }
+  } catch {
+    showStatus("Please enter a valid video URL.", "bad");
     return;
   }
 
-  const link = document.createElement("a");
-  const objectURL = URL.createObjectURL(file);
-  link.href = objectURL;
-  link.download = file.name;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  setTimeout(() => URL.revokeObjectURL(objectURL), 60000);
-  status.textContent = "Download requested: " + file.name;
-}
+  let filename = cleanFilename(nameInput.value);
 
-function openDirect(){
-  const value = document.getElementById("direct").value.trim();
-  const status = document.getElementById("status");
+  if (!filename) {
+    try {
+      filename = decodeURIComponent(
+        url.pathname.split("/").pop()
+      ) || "video.mp4";
+    } catch {
+      filename = "video.mp4";
+    }
+  }
+
+  if (!/\.(mp4|webm|mov|m4v|ogv)$/i.test(filename)) {
+    filename += ".mp4";
+  }
+
+  button.disabled = true;
+  button.textContent = "Preparing download...";
+  showStatus("Trying to download your video...");
 
   try {
-    const u = new URL(value);
-    if (u.protocol !== "https:" && u.protocol !== "http:") {
-      throw new Error("Invalid URL");
+    // This works only if the remote host allows browser CORS access.
+    const response = await fetch(url.href);
+
+    if (!response.ok) {
+      throw new Error("The video server rejected the request.");
     }
-    window.open(u.href, "_blank", "noopener,noreferrer");
-    status.textContent =
-      "Video link opened. Use the video's own download control if available.";
+
+    const blob = await response.blob();
+
+    if (!blob.size) {
+      throw new Error("The video file is empty.");
+    }
+
+    const objectURL = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = objectURL;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(objectURL), 60000);
+
+    showStatus("Download started: " + filename, "good");
+
   } catch {
-    status.textContent = "Please enter a valid HTTP or HTTPS URL.";
+    showStatus(
+      "Direct download is blocked by this host. Opening the video link instead.",
+      "bad"
+    );
+
+    window.open(url.href, "_blank", "noopener,noreferrer");
+  } finally {
+    button.disabled = false;
+    button.textContent = "⬇ Download Video";
   }
-}
+});
+
+document.getElementById("openYoutube").addEventListener(
+  "click",
+  function() {
+    const value = document.getElementById("youtubeUrl").value.trim();
+
+    try {
+      const url = new URL(value);
+      const host = url.hostname.toLowerCase();
+
+      const valid =
+        host === "youtube.com" ||
+        host.endsWith(".youtube.com") ||
+        host === "youtu.be";
+
+      if (!valid || !["http:", "https:"].includes(url.protocol)) {
+        throw new Error("Invalid YouTube URL");
+      }
+
+      window.open(url.href, "_blank", "noopener,noreferrer");
+
+    } catch {
+      showStatus("Please enter a valid YouTube URL.", "bad");
+    }
+  }
+);
 </script>
 </body>
 </html>
